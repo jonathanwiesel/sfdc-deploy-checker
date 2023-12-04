@@ -6,11 +6,7 @@ DevOps in Salesforce has its fair share of peculiarities, especially regarding h
 
 The one quirk we want to focus is regarding the fact that once a deployment starts, the local machine that triggers the deployment basically does an upload of the metadata and the rest of the process is mostly handed by the Salesforce instance, leaving the local system no choice but to wait (or poll) for an eventual deployment finish result, which depending on the org complexity could take from a few minutes to several hours. 
 
-When working with popular CI/CD services whos business model is based on minutes consumed per job, we start to see that having a job simply waiting for a long running deployments to complete may not be very profitable (and a waste of precious resources), therefore leaving a need for other approaches.
-
-## Applicability to other platforms / systems
-
-Salesforce platform may not be the only tied to the above mentioned constraints, however the following approach is applicable to other systems that face a similar scenario, AKA "just waiting for long running actions that the caller has nothing to do but wait for the server" to continue.
+When working with popular CI/CD services whos business model is based on minutes consumed per job, we start to see that having a job simply waiting for a long running deployments to complete may not be very profitable. Even when using propietary runners, either cloud or on-prem, are a waste of precious resources in that regard. Therefore leaving a need for other approaches.
 
 ## The proposal
 
@@ -99,4 +95,8 @@ Since the manual job is self-contained and self-sufficient (other than requiring
 
 ---
 
-The above mentioned architecture could be simplified when and if Salesforce decides to publish a platform event whe a deployment is finished (see idea), that way instead of AWS polling the instance on a continuous basis we could leverage the Event Relay functionality so said events are automatically available in EventBridge and complete the flow
+The above mentioned architecture could be simplified further when and if Salesforce decides to publish a platform event whe a deployment is finished (see idea), in such case instead of AWS polling the instance on a continuous basis we could leverage the Event Relay functionality so said events are automatically available in EventBridge and therefore trigger the API destination to notify the pipeline.
+
+## Applicability to other platforms / systems
+
+Salesforce platform may not be the only tied to the above mentioned constraints, however the following approach is applicable to other systems that face a similar scenario, AKA "just waiting for long running actions that the caller has nothing to do but wait for the server" to continue.
